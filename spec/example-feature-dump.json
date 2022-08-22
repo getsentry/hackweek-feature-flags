@@ -1,0 +1,42 @@
+{
+  "feature_flags": {
+    "accessToProfiling": {
+      "tags": {
+        "isEarlyAdopter": "true"
+      },
+      "evaluation": [
+        {
+          "type": "rollout",
+          "percentage": 0.5,
+          "result": true,
+          "tags": {
+            "userSegment": "slow"
+          }
+        },
+        {
+          "type": "match",
+          "result": true,
+          "tags": {
+            "isSentryDev": "true"
+          }
+        }
+      ]
+    },
+    "profilingEnabled": {
+      "evaluation": [
+        {
+          "type": "rollout",
+          "percentage": 0.05,
+          "result": true
+        },
+        {
+          "type": "match",
+          "result": true,
+          "tags": {
+            "isSentryDev": "true"
+          }
+        }
+      ]
+    }
+  }
+}
