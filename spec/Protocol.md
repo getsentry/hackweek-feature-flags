@@ -43,6 +43,7 @@ if (info) {
           // this is a sticky gradual rollout (RNG seeded against sticky-id)
           "type": "rollout",
           "percentage": 0.5,
+          "result": true,
           "tags": {
             "segment": "a"
           }
@@ -50,6 +51,7 @@ if (info) {
         {
           // if the tags match, then the result is returned
           "type": "match",
+          "result": true,
           "tags": {
             "segment": "b"
           }
@@ -68,11 +70,11 @@ function rollRandomNumber(context) {
   rng.random() // returns 0.0 to 1.0
 }
 
-function isFeatureEnabled(name, context) {
+function isFeatureEnabled(name, context = undefined): boolean | null {
   const realContext = context || GLOBAL_CONTEXT;
   const config = allFeatureFlags[name];
   if (!matchesTags(config.tags, realContext)) {
-    return false;
+    return null;
   }
   for (const evalConfig of config.evaluation) {
     if (!matchesTags(evalConfig.tags, realContext)) {
@@ -80,12 +82,12 @@ function isFeatureEnabled(name, context) {
     }
     if (evalConfig.type === "rollout") {
       if (rollRandomNumber(realContext) >= evalConfig.percentage) {
-        return true;
+        return evalConfig.result;
       }
     } else if (evalConfig.type === "match") {
-      return true;
+      return evalConfig.result;
     }
   }
-  return false;
+  return null;
 }
 ```
