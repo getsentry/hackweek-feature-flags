@@ -64,6 +64,7 @@ evaluate:
           "type": "rollout",
           "percentage": 0.5,
           "result": true,
+          "payload": "optional extra payload",
           "tags": {
             "segment": "a"
           }

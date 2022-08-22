@@ -18,6 +18,9 @@
           "result": true,
           "tags": {
             "isSentryDev": "true"
+          },
+          "payload": {
+            "internal_setting": "wat"
           }
         }
       ]
