@@ -33,22 +33,23 @@ if (info) {
 {
   "feature_flags": {
     "feature_flag_name": {
+      // global tags that need to match for this flag to be considered at all
       "tags": {
         "key": "value"
       },
+      // first match wins
       "evaluation": [
         {
+          // this is a sticky gradual rollout (RNG seeded against sticky-id)
           "type": "rollout",
           "percentage": 0.5,
-          "result": true,
           "tags": {
             "segment": "a"
           }
         },
         {
-          "type": "rollout",
-          "percentage": 0.1,
-          "result": true,
+          // if the tags match, then the result is returned
+          "type": "match",
           "tags": {
             "segment": "b"
           }
@@ -60,6 +61,13 @@ if (info) {
 ```
 
 ```javascript
+function rollRandomNumber(context) {
+  const stickyId = context.stickyId || context.userId;
+  const hash = sha1(stickyId);
+  const rng = Pcg32::new(hash.bytes);
+  rng.random() // returns 0.0 to 1.0
+}
+
 function isFeatureEnabled(name, context) {
   const realContext = context || GLOBAL_CONTEXT;
   const config = allFeatureFlags[name];
@@ -74,6 +82,8 @@ function isFeatureEnabled(name, context) {
       if (rollRandomNumber(realContext) >= evalConfig.percentage) {
         return true;
       }
+    } else if (evalConfig.type === "match") {
+      return true;
     }
   }
   return false;
