@@ -27,7 +27,27 @@ if (info) {
 }
 ```
 
+## Feature Flag Names
+
+Feature flag names are strings and the names are shared across types.
+So a boolean feature flag named `a` can also be returned when evaluating a feature flag API returning a number.
+
+Sentry internal feature flags are prefixed with `@@` to disambiugate them from
+feature flags used by customers.
+
+## Well Known Tags
+
+The following tags are well known for the context:
+
+- ``stickyId``: when this exists it's used as the primary ID for stickiness on rollouts.
+- ``userId``: client SDKs should automatically provide this if a user ID is set.
+  The stringified version is used as sticky ID if no sticky ID is defined.
+- ``deviceId``: client SDKs should automatically provide this on mobile.
+
 ## Feature Flag Dump
+
+This is what the feature flag dump API returns for the client to
+evaluate:
 
 ```json
 {
@@ -64,7 +84,7 @@ if (info) {
 
 ```javascript
 function rollRandomNumber(context) {
-  const stickyId = context.stickyId || context.userId;
+  const stickyId = context.stickyId || context.userId || context.deviceId;
   const hash = sha1(stickyId);
   const rng = Pcg32::new(hash.bytes);
   rng.random() // returns 0.0 to 1.0
