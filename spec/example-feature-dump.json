@@ -25,16 +25,16 @@
     "profilingEnabled": {
       "evaluation": [
         {
-          "type": "rollout",
-          "percentage": 0.05,
-          "result": true
-        },
-        {
           "type": "match",
           "result": true,
           "tags": {
             "isSentryDev": "true"
           }
+        },
+        {
+          "type": "rollout",
+          "percentage": 0.05,
+          "result": true
         }
       ]
     }
