@@ -40,6 +40,28 @@
           "result": true
         }
       ]
+    },
+
+    "loginBanner": {
+      "evaluation": [
+        {
+          "type": "match",
+          "result": "banner1",
+          "tags": {
+            "isSentryDev": "true"
+          },
+          "payload": {
+            "imageUrl": "https://mycdn.com/banner1.png"
+          }
+        },
+        {
+          "type": "match",
+          "result": "banner2",
+          "payload": {
+            "imageUrl": "https://mycdn.com/banner2.png"
+          }
+        }
+      ]
     }
   }
 }
