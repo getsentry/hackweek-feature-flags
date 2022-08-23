@@ -1,6 +1,7 @@
 {
   "feature_flags": {
     "accessToProfiling": {
+      "kind": "bool",
       "tags": {
         "isEarlyAdopter": "true"
       },
@@ -26,6 +27,7 @@
       ]
     },
     "profilingEnabled": {
+      "kind": "bool",
       "evaluation": [
         {
           "type": "match",
@@ -41,8 +43,8 @@
         }
       ]
     },
-
     "loginBanner": {
+      "kind": "string",
       "evaluation": [
         {
           "type": "match",
@@ -62,6 +64,16 @@
           }
         }
       ]
+    },
+    "tracesSampleRate": {
+      "kind": "number",
+      "evaluation": [
+        {
+          "type": "match",
+          "result": 0.25
+        }
+      ]
     }
+
   }
 }
