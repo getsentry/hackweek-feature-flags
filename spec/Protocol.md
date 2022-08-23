@@ -53,6 +53,8 @@ evaluate:
 {
   "feature_flags": {
     "feature_flag_name": {
+      // type of the value attached to the feature flag, contained in the field "result"
+      "kind": "bool",
       // global tags that need to match for this flag to be considered at all
       "tags": {
         "key": "value"
