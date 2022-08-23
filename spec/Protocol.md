@@ -87,7 +87,8 @@ evaluate:
 function rollRandomNumber(context) {
   const stickyId = context.stickyId || context.userId || context.deviceId;
   const hash = sha1(stickyId);
-  const rng = Pcg32::new(hash.bytes);
+  // use xorshift128 as in rand.py
+  const rng = Xorshift128::new(hash.bytes);
   rng.random() // returns 0.0 to 1.0
 }
 
