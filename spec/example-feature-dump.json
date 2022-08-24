@@ -2,9 +2,6 @@
   "feature_flags": {
     "accessToProfiling": {
       "kind": "bool",
-      "tags": {
-        "isEarlyAdopter": "true"
-      },
       "evaluation": [
         {
           "type": "rollout",
