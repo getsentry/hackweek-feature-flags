@@ -118,11 +118,13 @@ function isFeatureEnabled(name, context = undefined): boolean | null {
 
 ## Public API
 
-That's the current state and might be changed to be accept a generic `T` type when calling the Public API such as:
+This might be changed to accept a generic `T` type when calling the Public API such as:
 
 ```dart
 await Sentry.getFeatureFlag<bool>(key, {defaultValue: false, context: {}});
 ```
+
+Current state:
 
 Sentry static class
 
