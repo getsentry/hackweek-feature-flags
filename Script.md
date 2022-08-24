@@ -46,7 +46,7 @@ Celi sits on the desk, looking at her monitor.
     company goes towards parties, private jets and other things
     rather than towards observability tools, they are having
     barely any insights.  Their Sentry installation runs at an
-    abusmally low client side sample rate."
+    abysmally low client side sample rate."
 
         Celi, slacks her coworker
 
@@ -151,7 +151,7 @@ Celi and Jon are back in the office
     Navigates to the settings page and adds a new toggle called
     "hodlModeActivated" as bool.
 
-    She adds a rule for "is_while" "true" which returns false.
+    She adds a rule for "is_whale" "true" which returns false.
 
     She configures a rollout of 5% which returns true.
 
@@ -176,7 +176,7 @@ We see Cryptobro walking outside
     "What is going on?"
 
     Cryptobro looks at his phone on a Tweet that says that
-    Fahrenheit is going bankrypt and rolling out HODL mode.
+    Fahrenheit is going bankrupt and rolling out HODL mode.
 
 Kaminski enters the room:
 
