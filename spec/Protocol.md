@@ -115,3 +115,55 @@ function isFeatureEnabled(name, context = undefined): boolean | null {
   return null;
 }
 ```
+
+## Public API
+
+That's the current state and might be changed to be accept a generic `T` type when calling the Public API such as:
+
+```dart
+await Sentry.getFeatureFlag<bool>(key, {defaultValue: false, context: {}});
+```
+
+Sentry static class
+
+```dart
+static Future<bool> isFeatureEnabled(
+    String key, {
+    bool defaultValue = false,
+    FeatureFlagContextCallback? context,
+  });
+```
+
+```dart
+static Future<FeatureFlagInfo?> getFeatureFlagInfo(
+    String key, {
+    FeatureFlagContextCallback? context,
+  });
+```
+
+Hub class is the same as the Sentry static class but non-static.
+
+SentryClient class
+
+```dart
+Future<bool> isFeatureEnabled(
+    String key, {
+    Scope? scope,
+    bool defaultValue = false,
+    FeatureFlagContextCallback? context,
+  });
+```
+
+```dart
+Future<FeatureFlagInfo?> getFeatureFlagInfo(
+    String key, {
+    Scope? scope,
+    FeatureFlagContextCallback? context,
+  });
+```
+
+Transport class
+
+```dart
+Future<Map<String, FeatureFlag>?> fetchFeatureFlags();
+```
