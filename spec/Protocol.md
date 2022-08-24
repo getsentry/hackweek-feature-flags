@@ -129,7 +129,7 @@ Current state:
 Sentry static class
 
 ```dart
-static Future<bool> isFeatureEnabled(
+static Future<bool> isFeatureFlagEnabled(
     String key, {
     bool defaultValue = false,
     FeatureFlagContextCallback? context,
@@ -148,7 +148,7 @@ Hub class is the same as the Sentry static class but non-static.
 SentryClient class
 
 ```dart
-Future<bool> isFeatureEnabled(
+Future<bool> isFeatureFlagEnabled(
     String key, {
     Scope? scope,
     bool defaultValue = false,
