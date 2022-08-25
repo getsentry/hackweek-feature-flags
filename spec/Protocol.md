@@ -145,17 +145,25 @@ static Future<FeatureFlagInfo?> getFeatureFlagInfo(
   });
 ```
 
+```dart
+static T? getFeatureFlagValue<T>(
+    String key, {
+    T? defaultValue,
+    FeatureFlagContextCallback? context,
+  })
+```
+
 Hub class is the same as the Sentry static class but non-static.
 
 SentryClient class
 
 ```dart
-Future<bool> isFeatureFlagEnabled(
+T? getFeatureFlagValue<T>(
     String key, {
     Scope? scope,
-    bool defaultValue = false,
+    T? defaultValue,
     FeatureFlagContextCallback? context,
-  });
+  })
 ```
 
 ```dart
