@@ -89,7 +89,7 @@ evaluate:
 function rollRandomNumber(group, context) {
   const stickyId = context.stickyId || context.userId || context.deviceId;
   const seed = group + "|" + stickyId;
-  const hash = sha1(stickyId);
+  const hash = sha1(seed);
   // use xorshift128 as in rand.py
   const rng = Xorshift128::new(hash.bytes);
   rng.random() // returns 0.0 to 1.0
