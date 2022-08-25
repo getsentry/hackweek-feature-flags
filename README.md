@@ -17,6 +17,8 @@ if sentry_sdk.is_feature_flag_enabled("myFeatureFlag"):
     print("Feature flag enabled!")
 ```
 
+<img src="https://github.com/getsentry/hackweek-feature-flags/blob/main/screenshots/overview.png?raw=true" width="100%" alt="screenshot">
+
 # Draft PRs
 
 * [Dart SDK](https://github.com/getsentry/sentry-dart/pull/984)
