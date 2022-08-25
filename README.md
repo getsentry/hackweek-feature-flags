@@ -13,8 +13,8 @@ sentry_sdk.init(
 # this blocks until flags are fetched
 sentry_sdk.wait_until_ready()
 
-my_feature_flag = sentry_sdk.is_feature_flag_enabled("myFeatureFlag")
-print(f"{my_feature_flag=}")
+if sentry_sdk.is_feature_flag_enabled("myFeatureFlag"):
+    print("Feature flag enabled!")
 ```
 
 # Draft PRs
