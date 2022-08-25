@@ -36,8 +36,8 @@ class XorShift(object):
         self.next_u32() / MASK
 
 
-def prandom(sticky_id):
-    rand = XorShift(seed=sticky_id)
+def prandom(seed):
+    rand = XorShift(seed=seed)
     return rand.next()
 
 

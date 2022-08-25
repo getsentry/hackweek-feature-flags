@@ -86,8 +86,9 @@ evaluate:
 ```
 
 ```javascript
-function rollRandomNumber(context) {
+function rollRandomNumber(group, context) {
   const stickyId = context.stickyId || context.userId || context.deviceId;
+  const seed = group + "|" + stickyId;
   const hash = sha1(stickyId);
   // use xorshift128 as in rand.py
   const rng = Xorshift128::new(hash.bytes);
@@ -97,6 +98,7 @@ function rollRandomNumber(context) {
 function isFeatureEnabled(name, context = undefined): boolean | null {
   const realContext = context || GLOBAL_CONTEXT;
   const config = allFeatureFlags[name];
+  const group = config.group || name;
   if (!matchesTags(config.tags, realContext)) {
     return null;
   }
@@ -105,7 +107,7 @@ function isFeatureEnabled(name, context = undefined): boolean | null {
       continue;
     }
     if (evalConfig.type === "rollout") {
-      if (rollRandomNumber(realContext) >= evalConfig.percentage) {
+      if (rollRandomNumber(group, realContext) >= evalConfig.percentage) {
         return evalConfig.result;
       }
     } else if (evalConfig.type === "match") {
