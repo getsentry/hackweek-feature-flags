@@ -53,7 +53,9 @@ be grouped together to ensure that they are rolled out together if wanted.
 * [Relay](https://github.com/getsentry/relay/pull/1433)
 * [Sentry](https://github.com/getsentry/sentry/pull/38086)
 
-# Nice-to-have features
+# Nice-to-have Features
 
 * Force random stickiness (disabled by default), useful for non-user-facing features
 * Date and Time expiration, enable HTTP payload for errors directly from the Issues page for only 1h
+* Built-in feature flag to SDKs to enable verbose reporting (attachments for full outgoing HTTP requests and their responses)
+* Basic reusable segments (list of VIP orgs) that can be referenced.
