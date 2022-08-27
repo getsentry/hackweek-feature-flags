@@ -46,6 +46,8 @@ evaluated there.
 Feature flags are sticky by user or device and multiple feature flags can
 be grouped together to ensure that they are rolled out together if wanted.
 
+The detailed protocol specs [can be found here](Protocol.md).
+
 # Draft PRs
 
 * [Dart SDK](https://github.com/getsentry/sentry-dart/pull/984)
