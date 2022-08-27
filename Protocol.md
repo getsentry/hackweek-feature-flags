@@ -1,7 +1,12 @@
 # Feature Flag Protocol
 
-The idea is to allow both client and server side validation of feature flags.
-We prioritize client side evaluation for now.
+This is a simplified protocol for this hackweek project with known limitations.
+Right now SDKs can fetch from a new endpoint that Relay provides and will retrieve
+updated feature flags there.  The downside of this approach is that Relay will
+block for the project configs to become available.
+
+The preferred option for the future would be to introduce a general return channel
+on the envelope submission that Relay can send up information async.
 
 ## Endpoints
 
@@ -13,15 +18,15 @@ We prioritize client side evaluation for now.
 ## API Bikeshedding
 
 ```javascript
-if (Sentry.isFeatureEnabled("enable_profiling", {
+if (Sentry.isFeatureFlagEnabled("enable_profiling", {
   // use global normally, this overrides
   "user_id": 42
 })) {
   // something
 }
 
-// for future, ignore for now.
-const info = Sentry.getVariant("show_banner");
+// query a feature flag
+const info = Sentry.getFeatureFlagInfo("show_banner");
 if (info) {
   setBackgroundImage(info.payload["url"]);
 }
@@ -39,10 +44,27 @@ feature flags used by customers.
 
 The following tags are well known for the context:
 
-- ``stickyId``: when this exists it's used as the primary ID for stickiness on rollouts.
+- ``environment``: the name of the environment.
+- ``release``: the name of the release.
+- ``stickyId``: controls the stickyiness of the flag.  By default the user id is used
+  and on mobile devices the device ID in addition as fallback.
 - ``userId``: client SDKs should automatically provide this if a user ID is set.
   The stringified version is used as sticky ID if no sticky ID is defined.
-- ``deviceId``: client SDKs should automatically provide this on mobile.
+
+## Well Known Feature Flags
+
+- ``@sampleRate``: the error sample rate
+- ``@tracesSampleRate``: the transaction based trace sample rate
+- ``@profileSampleRate``: the sample rate for client side profiling
+
+All the built-in tags do not carry payload and the UI does not emit it.
+
+## Feature Flag Kinds
+
+- `number`: any number
+- `rate`: number between 0.0 and 1.0 (shown as percentage slider in the UI)
+- `boolean`: true or false, shown as switch
+- `string`: can be used to pick a variant
 
 ## Feature Flag Dump
 
@@ -55,10 +77,6 @@ evaluate:
     "feature_flag_name": {
       // type of the value attached to the feature flag, contained in the field "result"
       "kind": "bool",
-      // global tags that need to match for this flag to be considered at all
-      "tags": {
-        "key": "value"
-      },
       // first match wins
       "evaluation": [
         {
@@ -66,7 +84,7 @@ evaluate:
           "type": "rollout",
           "percentage": 0.5,
           "result": true,
-          "payload": "optional extra payload",
+          "payload": {...},
           "tags": {
             "segment": "a"
           }
@@ -95,13 +113,10 @@ function rollRandomNumber(group, context) {
   rng.random() // returns 0.0 to 1.0
 }
 
-function isFeatureEnabled(name, context = undefined): boolean | null {
+function isFeatureFlagEnabled(name, context = undefined): boolean | null {
   const realContext = context || GLOBAL_CONTEXT;
   const config = allFeatureFlags[name];
   const group = config.group || name;
-  if (!matchesTags(config.tags, realContext)) {
-    return null;
-  }
   for (const evalConfig of config.evaluation) {
     if (!matchesTags(evalConfig.tags, realContext)) {
       continue;
@@ -123,59 +138,7 @@ function isFeatureEnabled(name, context = undefined): boolean | null {
 This might be changed to accept a generic `T` type when calling the Public API such as:
 
 ```dart
-await Sentry.getFeatureFlag<bool>(key, {defaultValue: false, context: {}});
-```
-
-Current state:
-
-Sentry static class
-
-```dart
-static Future<bool> isFeatureFlagEnabled(
-    String key, {
-    bool defaultValue = false,
-    FeatureFlagContextCallback? context,
-  });
-```
-
-```dart
-static Future<FeatureFlagInfo?> getFeatureFlagInfo(
-    String key, {
-    FeatureFlagContextCallback? context,
-  });
-```
-
-```dart
-static T? getFeatureFlagValue<T>(
-    String key, {
-    T? defaultValue,
-    FeatureFlagContextCallback? context,
-  })
+await Sentry.getFeatureFlagInfo<T>(key, {defaultValue: false, context: {}});
 ```
 
 Hub class is the same as the Sentry static class but non-static.
-
-SentryClient class
-
-```dart
-T? getFeatureFlagValue<T>(
-    String key, {
-    Scope? scope,
-    T? defaultValue,
-    FeatureFlagContextCallback? context,
-  })
-```
-
-```dart
-Future<FeatureFlagInfo?> getFeatureFlagInfo(
-    String key, {
-    Scope? scope,
-    FeatureFlagContextCallback? context,
-  });
-```
-
-Transport class
-
-```dart
-Future<Map<String, FeatureFlag>?> fetchFeatureFlags();
-```
